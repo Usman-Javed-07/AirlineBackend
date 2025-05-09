@@ -26,7 +26,10 @@ const Booking = sequelize.define("Booking", {
   total_amount: { type: DataTypes.DECIMAL(10, 2) },
   card_holder: { type: DataTypes.STRING },
   card_number: { type: DataTypes.STRING },
-  card_expiry: { type: DataTypes.STRING }
+  card_expiry: { type: DataTypes.STRING },
+  refund_amount: {type:DataTypes.FLOAT},
+  status: {type:DataTypes.STRING}
+  
 });
 
 module.exports = Booking;

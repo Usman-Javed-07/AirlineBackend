@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/routes', routeRoutes);
 app.use('/api/flights', flightRoutes);
 app.use("/api", bookingRoutes);
+app.use("/api/bookings", bookingRoutes);
 // DB sync
 sequelize.sync({ alter: true })
   .then(async () => {
