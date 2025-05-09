@@ -137,3 +137,15 @@ exports.cancelBooking = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getBookingById = async (req, res) => {
+  try {
+    const booking = await Booking.findOne({ where: { booking_id: req.params.bookingId } });
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    res.json(booking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
