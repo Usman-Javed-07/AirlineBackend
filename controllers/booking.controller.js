@@ -2,6 +2,7 @@ const { saveBooking } = require("../models/booking.model");
 const nodemailer = require("nodemailer");
 const Booking = require('../models/booking.model'); 
 
+
 exports.createBooking = async (req, res) => {
   const data = req.body;
 
@@ -33,6 +34,33 @@ exports.createBooking = async (req, res) => {
       card_expiry: data.payment.cardDetails.expiry
     });
 
+    // ✉️ Set up the transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    // ✉️ Email content
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: booking.email,
+      subject: "Your Booking Confirmation",
+      text: `Dear ${booking.full_name},\n\nYour booking is confirmed!\nBooking ID: ${booking.booking_id}\nFlight Date: ${booking.flight_date}\nRoute: ${booking.flight_route}\n\nThank you for choosing our airline.`
+    };
+
+    // ✉️ Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Email failed to send:", error);
+      } else {
+        console.log("Confirmation email sent:", info.response);
+      }
+    });
+
+    // ✅ Respond after sending
     res.status(200).json({ message: "Booking created successfully", booking });
 
   } catch (err) {
@@ -40,4 +68,3 @@ exports.createBooking = async (req, res) => {
     res.status(500).json({ error: "Booking failed" });
   }
 };
-
