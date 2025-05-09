@@ -33,7 +33,16 @@ const Flight = sequelize.define('Flight', {
   first_price: {
     type: DataTypes.FLOAT,
     allowNull: false,
-  }
+  },
+  pickup_cities: {
+  type: DataTypes.JSON, 
+   allowNull: true
+},
+dropoff_cities: {
+  type: DataTypes.JSON,
+  allowNull: true
+}
+
 }, {
   tableName: 'flights',
   timestamps: false
