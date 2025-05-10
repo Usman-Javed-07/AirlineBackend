@@ -1,14 +1,20 @@
-const Review = require('../models/review.model'); // Correct import
+const Review = require('../models/review.model');
 
 exports.submitReview = async (req, res) => {
   try {
-    const { vessel, rating, comments } = req.body;
+    const { username, email, vessel, rating, comments } = req.body;
 
-    if (!vessel || !rating || !comments) {
+    if (!username || !email || !vessel || !rating || !comments) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const review = await Review.create({ vessel, rating, comments });
+    const review = await Review.create({
+      username,
+      email,
+      vessel,
+      rating,
+      comments
+    });
 
     res.status(201).json({ message: 'Review submitted successfully', review });
   } catch (err) {

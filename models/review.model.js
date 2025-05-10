@@ -1,7 +1,18 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Sequelize instance
+const sequelize = require('../config/db');
 
 const Review = sequelize.define('Review', {
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isEmail: true,
+    }
+  },
   vessel: {
     type: DataTypes.STRING,
     allowNull: false,
