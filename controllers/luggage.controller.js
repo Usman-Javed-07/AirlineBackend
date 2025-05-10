@@ -44,3 +44,21 @@ exports.getAllLuggage = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch luggage data" });
   }
 };
+
+// Check if luggage already exists for a booking ID
+exports.luggageExistsForBooking = async (req, res) => {
+  try {
+    const existingLuggage = await Luggage.findOne({
+      where: { bookingId: req.params.bookingId }
+    });
+
+    if (existingLuggage) {
+      return res.status(200).json({ exists: true });
+    }
+
+    res.status(200).json({ exists: false });
+  } catch (err) {
+    console.error("Error checking luggage existence:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
