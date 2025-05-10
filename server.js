@@ -6,7 +6,7 @@ const routeRoutes = require('./routes/routes.routes');
 const flightRoutes = require('./routes/flight.routes');
 const bookingRoutes = require("./routes/booking.routes");
 const reviewRoutes = require('./routes/review.routes');
-
+const luggageRoutes = require("./routes/luggage.routes");
 
 
 const app = express();
@@ -20,6 +20,8 @@ app.use('/api/flights', flightRoutes);
 app.use("/api", bookingRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use('/api', reviewRoutes);
+app.use("/api", luggageRoutes);
+
 
 // DB sync
 sequelize.sync({ alter: true })
