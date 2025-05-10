@@ -22,3 +22,13 @@ exports.submitReview = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.findAll({ order: [['createdAt', 'DESC']] });
+    res.json(reviews);
+  } catch (err) {
+    console.error("Error fetching reviews:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

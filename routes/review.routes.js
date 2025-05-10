@@ -14,5 +14,6 @@ const router = express.Router();
 const reviewController = require('../controllers/review.controller');
 
 router.post('/reviews', reviewController.submitReview);
+router.get('/reviews', reviewController.getAllReviews); 
 
 module.exports = router;
