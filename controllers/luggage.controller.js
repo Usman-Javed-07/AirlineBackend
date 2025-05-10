@@ -1,7 +1,7 @@
 const Luggage = require("../models/luggage.model");
 
 const db = require("../models/luggage.model");
-const Booking = require("../models/booking.model"); // Assuming you have a Booking model
+const Booking = require("../models/booking.model");
 
 exports.checkInLuggage = async (req, res) => {
   const { bookingId, weight, luggageId, numBags } = req.body;
@@ -31,5 +31,16 @@ exports.checkInLuggage = async (req, res) => {
   } catch (error) {
     console.error("Check-in error:", error);
     res.status(500).json({ error: "Failed to check-in luggage" });
+  }
+};
+
+// Get all luggage entries
+exports.getAllLuggage = async (req, res) => {
+  try {
+    const luggage = await Luggage.findAll();
+    res.json(luggage);
+  } catch (err) {
+    console.error("Error fetching luggage:", err);
+    res.status(500).json({ error: "Failed to fetch luggage data" });
   }
 };
