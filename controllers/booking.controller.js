@@ -260,4 +260,50 @@ exports.getAllBookings = async (req, res) => {
 };
 
 
+// GET /api/bookings/report/:route
+exports.getFlightReportByRoute = async (req, res) => {
+  const route = req.params.route; // ✅ Use route from URL params
+  console.log("Selected Route:", route); 
+
+  try {
+    if (!route) {
+      return res.status(400).json({ error: "Flight route is required" });
+    }
+
+    // Fetch all bookings with the given route
+    const bookings = await Booking.findAll({
+      where: {
+        flight_route: route
+      },
+      order: [['createdAt', 'DESC']]
+    });
+
+    const totalBookings = bookings.length;
+    const checkedInCount = bookings.filter(b => b.checkedIn === true).length;
+    const missedCount = totalBookings - checkedInCount;
+    const totalAmountPaid = bookings.reduce((sum, b) => sum + Number(b.total_amount || 0), 0);
+
+    // Only send necessary fields to frontend
+    const simplifiedBookings = bookings.map(b => ({
+      booking_id: b.booking_id,
+      name: b.full_name,
+      checkedIn: b.checkedIn,
+      price: Number(b.total_amount || 0).toFixed(2)
+    }));
+
+    res.json({
+      route,
+      report: {
+        madeIt: checkedInCount,
+        missedIt: missedCount,
+        totalPaid: totalAmountPaid.toFixed(2)
+      },
+      bookings: simplifiedBookings
+    });
+
+  } catch (err) {
+    console.error("Report generation error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 

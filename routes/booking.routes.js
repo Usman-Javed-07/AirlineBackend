@@ -20,4 +20,7 @@ router.post('/check-in', bookingController.checkInPassenger);
 
 router.get('/bookings', bookingController.getAllBookings); 
 
+router.get("/report/:route", bookingController.getFlightReportByRoute);
+
+
 module.exports = router;
