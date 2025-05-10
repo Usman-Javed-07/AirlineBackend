@@ -191,3 +191,60 @@ exports.updateBookingDetails = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+exports.checkInPassenger = async (req, res) => {
+  try {
+    console.log("Request body:", req.body);
+
+    const { bookingId } = req.body;
+
+    if (!bookingId) {
+      console.log("Missing bookingId");
+      return res.status(400).json({ error: "Booking ID is required" });
+    }
+
+    // Find the booking by ID
+    const booking = await Booking.findOne({ where: { booking_id: bookingId } });
+
+    if (!booking) {
+      console.log("Booking not found for ID:", bookingId);
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    // Get today's date in UTC (YYYY-MM-DD format)
+    const today = new Date();
+    const todayDate = today.toISOString().split('T')[0]; // Strip out time, ensure it's in UTC
+
+    // Get the flight date from the booking in UTC (YYYY-MM-DD format)
+    const flightDate = new Date(booking.flight_date);
+    const flightDateString = flightDate.toISOString().split('T')[0]; // Strip out time, ensure it's in UTC
+
+    console.log("Today Date:", todayDate, "Flight Date:", flightDateString); // Check the values of these dates
+    console.log("Booking Status:", booking.status);
+
+    // Ensure the booking status is 'booked'
+    if (booking.status !== "booked") {
+      return res.status(400).json({ error: "Only booked passengers can check-in" });
+    }
+
+    // Check if today's date matches the flight date
+    if (todayDate !== flightDateString) {
+      return res.status(400).json({ error: "You can only check-in on the flight date" });
+    }
+
+    // Proceed with check-in
+    booking.checkedIn = true;
+    await booking.save(); // Save the checked-in status
+
+    // Respond with success message
+    res.json({ message: "Check-in successful" });
+
+  } catch (error) {
+    console.error("Check-in error:", error); // Log error for better debugging
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+

@@ -16,6 +16,7 @@ router.get("/bookings/:bookingId", bookingController.getBookingById);
 
 router.put("/update-details", bookingController.updateBookingDetails);
 
+router.post('/check-in', bookingController.checkInPassenger);
 
 
 module.exports = router;

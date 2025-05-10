@@ -28,7 +28,12 @@ const Booking = sequelize.define("Booking", {
   card_number: { type: DataTypes.STRING },
   card_expiry: { type: DataTypes.STRING },
   refund_amount: {type:DataTypes.FLOAT},
-  status: {type:DataTypes.STRING}
+  status: {type:DataTypes.STRING},
+  checkedIn: {
+  type: DataTypes.BOOLEAN,
+  defaultValue: false
+}
+
   
 });
 
