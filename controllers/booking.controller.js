@@ -106,7 +106,7 @@ exports.amendBooking = async (req, res) => {
 };
 
 exports.cancelBooking = async (req, res) => {
-  const { bookingId } = req.body;
+  const { bookingId, employeeName } = req.body; // Extract employeeName from the request body
 
   try {
     const booking = await Booking.findOne({ where: { booking_id: bookingId } });
@@ -123,13 +123,15 @@ exports.cancelBooking = async (req, res) => {
     const refundAmount = booking.total_amount * 0.5;
     const cardNumber = booking.card_number;
 
+    // Update the booking status and store the employee's name who canceled it
     await booking.update({
       status: "cancelled",
-      refund_amount: refundAmount
+      refund_amount: refundAmount,
+      cancelled_by: employeeName // Store the employee's name
     });
 
     res.status(200).json({
-      message: `Booking cancelled. Refund of £${refundAmount.toFixed(2)} sent to card ending in ${cardNumber.slice(-4)}.`
+      message: `Booking cancelled. Refund of £${refundAmount.toFixed(2)} sent to card ending in ${cardNumber.slice(-4)}. Cancellation performed by ${employeeName}.`
     });
 
   } catch (error) {
@@ -137,6 +139,7 @@ exports.cancelBooking = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 exports.getBookingById = async (req, res) => {
   try {

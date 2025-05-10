@@ -32,7 +32,8 @@ const Booking = sequelize.define("Booking", {
   checkedIn: {
   type: DataTypes.BOOLEAN,
   defaultValue: false
-}
+},
+cancelled_by:{ type:DataTypes.STRING},
 
   
 });
