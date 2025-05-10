@@ -149,3 +149,45 @@ exports.getBookingById = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+exports.updateBookingDetails = async (req, res) => {
+  const { bookingId, updatedInfo } = req.body;
+
+  try {
+    const booking = await Booking.findOne({ where: { booking_id: bookingId } });
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    const flightDate = new Date(booking.flight_date);
+    const now = new Date();
+    const hoursDiff = (flightDate - now) / (1000 * 60 * 60);
+
+    if (hoursDiff <= 24) {
+      return res.status(400).json({ error: "Cannot update booking within 24 hours of flight" });
+    }
+
+    await booking.update({
+      full_name: updatedInfo.fullName,
+      email: updatedInfo.email,
+      dob: updatedInfo.dob,
+      passport_number: updatedInfo.passportNumber,
+      nationality: updatedInfo.nationality,
+      passport_issue_date: updatedInfo.passportIssueDate,
+      passport_expiry_date: updatedInfo.passportExpiryDate,
+      visa_number: updatedInfo.visaNumber,
+      visa_expiry_date: updatedInfo.visaExpiryDate,
+      meal_preference: updatedInfo.mealPreference,
+      pickup_location: updatedInfo.pickupLocation,
+      dropoff_location: updatedInfo.dropoffLocation,
+      extras: JSON.stringify(updatedInfo.selectedExtras),
+      card_holder: updatedInfo.cardName,
+      card_number: updatedInfo.cardNumber,
+      card_expiry: updatedInfo.cardExpiry
+    });
+
+    res.status(200).json({ message: "Booking details updated successfully" });
+
+  } catch (error) {
+    console.error("Update failed:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

@@ -14,5 +14,8 @@ router.put("/cancel", bookingController.cancelBooking);
 // Get booking by ID
 router.get("/bookings/:bookingId", bookingController.getBookingById);
 
+router.put("/update-details", bookingController.updateBookingDetails);
+
+
 
 module.exports = router;
