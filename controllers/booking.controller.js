@@ -246,5 +246,15 @@ exports.checkInPassenger = async (req, res) => {
   }
 };
 
+exports.getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.findAll({ order: [['createdAt', 'DESC']] });
+    res.json(bookings);
+  } catch (err) {
+    console.error("Error fetching bookings:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 
 

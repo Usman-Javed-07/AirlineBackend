@@ -18,5 +18,6 @@ router.put("/update-details", bookingController.updateBookingDetails);
 
 router.post('/check-in', bookingController.checkInPassenger);
 
+router.get('/bookings', bookingController.getAllBookings); 
 
 module.exports = router;
