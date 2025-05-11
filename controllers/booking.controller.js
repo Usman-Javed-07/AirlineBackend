@@ -131,7 +131,7 @@ exports.cancelBooking = async (req, res) => {
     });
 
     res.status(200).json({
-      message: `Booking cancelled. Refund of £${refundAmount.toFixed(2)} sent to card ending in ${cardNumber.slice(-4)}. Cancellation performed by ${employeeName}.`
+      message: `Booking cancelled. Refund of £${refundAmount.toFixed(2)} sent to card ending in ${cardNumber.slice(-4)}.`
     });
 
   } catch (error) {
