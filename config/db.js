@@ -1,5 +1,6 @@
 require('dotenv').config(); // Load .env variables
 
+
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(
